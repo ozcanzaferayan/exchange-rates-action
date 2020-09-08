@@ -28,5 +28,5 @@ jobs:
     - name: NPM ops
       shell: bash
       run: |
-        npm ci
-        npm start
+        yarn
+        yarn start
