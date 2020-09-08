@@ -10,7 +10,7 @@ const TWILIO_ACCOUNT_SID = core.getInput('TWILIO_ACCOUNT_SID');
 const TWILIO_AUTH_TOKEN = core.getInput('TWILIO_AUTH_TOKEN');
 
 const emptyChar = '⠀';
-const client = new twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 
 fetch("https://www.doviz.com/")
@@ -25,8 +25,8 @@ let evalRes = (res) => {
         smsTextArray.push(evalEachExchangeItem($, item));
     });
     client.messages.create({
-        to: MSISDN_RECEIVER,
-        from: MSISDN_SENDER,
+        to: process.env.MSISDN_RECEIVER,
+        from: process.env.MSISDN_SENDER,
         body: `${emptyChar}\n${emptyChar}\n${smsTextArray.join('\n')}\n${emptyChar}\n${emptyChar}`
     });
 }
