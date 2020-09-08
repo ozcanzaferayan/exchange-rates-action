@@ -30,13 +30,13 @@ let evalRes = (res) => {
         if (err) return console.log(err);
         console.log('Written sms.txt');
     });
-    // client.messages.create({
-    //         to: process.env.MSISDN_RECEIVER,
-    //         from: process.env.MSISDN_SENDER,
-    //         body: `${emptyChar}\n${emptyChar}\n${smsTextArray.join('\n')}\n${emptyChar}\n${emptyChar}`
-    //     })
-    //     .then(message => console.log(message.sid))
-    //     .catch(error => console.log(error));
+    client.messages.create({
+            to: process.env.MSISDN_RECEIVER,
+            from: process.env.MSISDN_SENDER,
+            body: smsText
+        })
+        .then(message => console.log(message.sid))
+        .catch(error => console.log(error));
 }
 
 let evalEachExchangeItem = ($, exchangeItem) => {
