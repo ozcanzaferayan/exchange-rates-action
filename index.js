@@ -25,10 +25,11 @@ let evalRes = (res) => {
         smsTextArray.push(evalEachExchangeItem($, item));
     });
     client.messages.create({
-        to: process.env.MSISDN_RECEIVER,
-        from: process.env.MSISDN_SENDER,
-        body: `${emptyChar}\n${emptyChar}\n${smsTextArray.join('\n')}\n${emptyChar}\n${emptyChar}`
-    });
+            to: process.env.MSISDN_RECEIVER,
+            from: process.env.MSISDN_SENDER,
+            body: `${emptyChar}\n${emptyChar}\n${smsTextArray.join('\n')}\n${emptyChar}\n${emptyChar}`
+        })
+        .then(message => console.log(message.sid));
 }
 
 let evalEachExchangeItem = ($, exchangeItem) => {
