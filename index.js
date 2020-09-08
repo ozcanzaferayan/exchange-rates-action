@@ -20,7 +20,7 @@ let evalRes = (res) => {
 }
 
 let getExchanges = ($) => {
-    // Get first 3 exchanges (altın, dolar, euro)
+    // Get first 3 exchange items (altın, dolar, euro)
     return $('.market-data .item a').slice(0, 3);
 }
 
