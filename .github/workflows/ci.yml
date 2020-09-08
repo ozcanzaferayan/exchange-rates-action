@@ -1,9 +1,9 @@
-name: Node.js CI
+name: Daily
 
 on:
   schedule:
     # Execute CI at Turkey Timezone 11:45 and 16:45 (UTC + 3)
-    - cron '45 8 * * *'
+    - cron: '45 8,13 * * *'
 
 jobs:
   build:
