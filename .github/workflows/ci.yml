@@ -26,7 +26,7 @@ jobs:
       shell: bash
       run: |
         chmod +x ./setEnv.sh
-        ./setEnv.sh ${{ secrets.MSISDN_SENDER }}
+        ./setEnv.sh ${{ secrets.MSISDN_RECEIVER }} ${{ secrets.MSISDN_SENDER }} ${{ secrets.TWILIO_ACCOUNT_SID }} ${{ secrets.TWILIO_AUTH_TOKEN }}
     - name: NPM ops
       shell: bash
       run: |
