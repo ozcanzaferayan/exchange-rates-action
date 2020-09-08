@@ -29,7 +29,8 @@ let evalRes = (res) => {
             from: process.env.MSISDN_SENDER,
             body: `${emptyChar}\n${emptyChar}\n${smsTextArray.join('\n')}\n${emptyChar}\n${emptyChar}`
         })
-        .then(message => console.log(message.sid));
+        .then(message => console.log(message.sid))
+        .catch(error => console.log(error));
 }
 
 let evalEachExchangeItem = ($, exchangeItem) => {
