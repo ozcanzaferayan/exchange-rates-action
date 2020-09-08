@@ -3,7 +3,7 @@ name: Daily
 on:
   schedule:
     # Execute CI at Turkey Timezone 11:45 and 16:45 (UTC + 3)
-    - cron: '30 20 * * *'
+    - cron: '45 08,13 * * *'
 
 jobs:
   build:
