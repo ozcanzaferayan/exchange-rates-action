@@ -14,8 +14,9 @@ Exchange rates is Github Action that sends SMS about exchange rates daily.
 ## Usage
 
 1. Fork this repo.
-2. Go to your forked repo's "Settings" tab and navigate to "Secrets" from left sidebar.
-3. Create secrets according to your [twilio account](https://www.twilio.com/console) information:
+2. If you have trial twilio account, you should specify [verified gsm numbers](https://www.twilio.com/console/phone-numbers/verified) for sending sms.
+3. Go to your forked repo's "Settings" tab and navigate to "Secrets" from left sidebar.
+4. Create secrets according to your [twilio account](https://www.twilio.com/console) information:
 
 ```bash
 MSISDN_RECEIVERS_DELIMITED_WITH_SEMICOLON="+905311234567;+905531234567"
