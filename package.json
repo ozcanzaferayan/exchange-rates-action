@@ -1,0 +1,17 @@
+{
+    "name": "exchange-rates-action",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://github.com/ozcanzaferayan/exchange-rates-action.git",
+    "author": "Özcan Zafer AYAN <ozcanzaferayan@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "@actions/core": "^1.2.5",
+        "cheerio": "^1.0.0-rc.3",
+        "node-fetch": "^2.6.1",
+        "twilio": "^3.49.1"
+    },
+    "scripts": {
+        "start": "node ./index.js"
+    }
+}
