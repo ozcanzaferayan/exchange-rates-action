@@ -22,11 +22,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: SMS text
-      shell: bash
-      run: |
-        chmod +x ./setEnv.sh
-        ./setEnv.sh ${{ secrets.MSISDN_RECEIVER }} ${{ secrets.MSISDN_SENDER }} ${{ secrets.TWILIO_ACCOUNT_SID }} ${{ secrets.TWILIO_AUTH_TOKEN }}
     - name: NPM ops
       shell: bash
       run: |
@@ -34,19 +29,10 @@ jobs:
         yarn start
       env:
         CI: true
-        MSISDN_RECEIVER: ${{ secrets.MSISDN_RECEIVER }}
+        MSISDN_RECEIVERS_DELIMITED_WITH_SEMICOLON: ${{ secrets.MSISDN_RECEIVERS_DELIMITED_WITH_SEMICOLON }}
         MSISDN_SENDER: ${{ secrets.MSISDN_SENDER }}
         TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
         TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-    # - name: SMS text
-    #   shell: bash
-    #   run: chmod +x ./sendSms.sh && ./sendSms.sh
-    #   env:
-    #     CI: true
-    #     MSISDN_RECEIVER: ${{ secrets.MSISDN_RECEIVER }}
-    #     MSISDN_SENDER: ${{ secrets.MSISDN_SENDER }}
-    #     TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-    #     TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
     - name: Upload files
       uses: actions/upload-artifact@v2
       with:

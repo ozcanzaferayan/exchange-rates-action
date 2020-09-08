@@ -1,14 +1,7 @@
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const twilio = require('twilio');
-const { environment } = require('./env/env.js');
-const core = require('@actions/core');
 const fs = require('fs');
-
-const MSISDN_RECEIVER = core.getInput('MSISDN_RECEIVER');
-const MSISDN_SENDER = core.getInput('MSISDN_SENDER');
-const TWILIO_ACCOUNT_SID = core.getInput('TWILIO_ACCOUNT_SID');
-const TWILIO_AUTH_TOKEN = core.getInput('TWILIO_AUTH_TOKEN');
 
 const emptyChar = '⠀';
 const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
@@ -20,33 +13,52 @@ fetch("https://www.doviz.com/")
 
 let evalRes = (res) => {
     const $ = cheerio.load(res);
-    $item = $('.market-data .item a').slice(0, 3); // Get first 3 items
-    let smsTextArray = [];
-    $item.each((index, item) => {
-        smsTextArray.push(evalEachExchangeItem($, item));
-    });
-    const smsText = `${emptyChar}\n${emptyChar}\n${smsTextArray.join('\n')}\n${emptyChar}\n${emptyChar}`;
-    fs.writeFile('sms.txt', smsText, function(err) {
-        if (err) return console.log(err);
-        console.log('Written sms.txt');
-    });
-    client.messages.create({
-            to: process.env.MSISDN_RECEIVER,
-            from: process.env.MSISDN_SENDER,
-            body: smsText
-        })
-        .then(message => console.log(message.sid))
-        .catch(error => console.log(error));
+    item = getExchanges($);
+    const smsText = createSmsText($, item);
+    writeSmsToFile(smsText);
+    sendSmsToRecievers(smsText);
 }
 
-let evalEachExchangeItem = ($, exchangeItem) => {
+let getExchanges = ($) => {
+    // Get first 3 exchanges (altın, dolar, euro)
+    return $('.market-data .item a').slice(0, 3);
+}
+
+let createSmsText = ($, item) => {
+    let smsTextArray = [];
+    item.each((index, item) => {
+        smsTextArray.push(createSmsLineForExchangeItem($, item));
+    });
+    return `${emptyChar}\n${emptyChar}\n${smsTextArray.join('\n')}\n${emptyChar}\n${emptyChar}`;
+}
+
+let createSmsLineForExchangeItem = ($, exchangeItem) => {
     let name = $(exchangeItem).children(".name").text();
-    if (name === 'GRAM ALTIN') {
-        name = 'ALTIN';
-    }
+    name = name === 'GRAM ALTIN' ? 'ALTIN' : name;
     let value = $(exchangeItem).children(".value").text();
     let change = $(exchangeItem).children(".change").text().trim();
     let isChangedPositively = !change.includes("-");
     let changeEmoji = isChangedPositively ? "✅" : "🔻";
     return `${changeEmoji} ${change} ${value} ${name}`;
+}
+
+let writeSmsToFile = (sms) => {
+    fs.writeFile('sms.txt', sms, function(err) {
+        if (err) return console.log(err);
+        console.log('Written sms.txt');
+    });
+}
+
+let sendSmsToRecievers = (smsText) => {
+    const receivers = process.env.MSISDN_RECEIVERS_DELIMITED_WITH_SEMICOLON;
+    receivers.split(';').forEach(receiver => {
+        client.messages.create({
+                to: receiver,
+                from: process.env.MSISDN_SENDER,
+                body: smsText
+            })
+            .then(message => console.log('Sent', 'SID', message.sid))
+            .catch(error => console.log('Sending error', error));
+    });
+
 }
